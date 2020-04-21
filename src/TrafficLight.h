@@ -30,6 +30,13 @@ private:
 // can be either „red“ or „green“. Also, add the private method „void cycleThroughPhases()“. 
 // Furthermore, there shall be the private member _currentPhase which can take „red“ or „green“ as its value. 
 
+//Task-1
+enum TrafficLightPhase{
+    red,
+    green
+};
+
+
 class TrafficLight
 {
 public:
@@ -39,12 +46,22 @@ public:
 
     // typical behaviour methods
 
+
+    //Task-1
+    void waitForGreen();
+    void simulate();
+    TrafficLightPhase getCurrentPhase();
+
 private:
     // typical behaviour methods
 
     // FP.4b : create a private member of type MessageQueue for messages of type TrafficLightPhase 
     // and use it within the infinite loop to push each new TrafficLightPhase into it by calling 
     // send in conjunction with move semantics.
+    
+    //Task-1
+    void cycleThroughPhases();
+    TrafficLightPhase _currentPhase;
 
     std::condition_variable _condition;
     std::mutex _mutex;
