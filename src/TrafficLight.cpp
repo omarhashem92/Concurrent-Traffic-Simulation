@@ -38,12 +38,12 @@ void MessageQueue<T>::send(T &&msg)
 
 /* Implementation of class "TrafficLight" */
 
-/*
+
 TrafficLight::TrafficLight()
 {
     _currentPhase = TrafficLightPhase::red;
 }
-*/
+
 void TrafficLight::waitForGreen()
 {
     // FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
@@ -86,15 +86,20 @@ void TrafficLight::cycleThroughPhases()
 
     //generating random number from 4 to 6.  ref http://www.cplusplus.com/forum/general/63907/
     static std::mt19937 engine(std::time(nullptr));
-	static std::uniform_int_distribution<> distribution(4000, 6000); //4000 & 6000 to generate it in miliseconds instead of seconds.
+	static std::uniform_int_distribution<> distribution(4, 6); //4000 & 6000 to generate it in miliseconds instead of seconds.
 	auto randNumber =  distribution(engine) ;
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
 
     while(1){
 
         //auto newTime = timeNow - std::chrono::system_clock::now();     //removed for now, will do it that way
-        int counter = 0;
+        // start time measurement
+        t1 = std::chrono::high_resolution_clock::now();
+        //int counter = 0;
         //check if the counter reaches the generated random value in miliseconds
-        if(randNumber == counter){
+        if(duration >= randNumber){
 
             //toggling the current phase of traffic light
             if (_currentPhase == TrafficLightPhase::red){
@@ -107,9 +112,11 @@ void TrafficLight::cycleThroughPhases()
             _messageQueue.send(std::move(_currentPhase));         //comment to be removed once implementing send function
         }
 
-        //timeNow = std::chrono::system_clock::now();
+        // stop time measurement and print execution time
+        t2 = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        counter++;
+        //counter++;
     }
 
 }
