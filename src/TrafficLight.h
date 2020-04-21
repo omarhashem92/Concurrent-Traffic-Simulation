@@ -20,8 +20,15 @@ class MessageQueue
 {
 public:
 
+//Task-3
+void send(T &&msg);
+T receive();
+
+
 private:
-    
+    std::deque <T> _queue;
+    std::condition_variable _conditionVariable;
+    std::mutex _mutex;
 };
 
 // FP.1 : Define a class „TrafficLight“ which is a child class of TrafficObject. 
@@ -37,7 +44,7 @@ enum TrafficLightPhase{
 };
 
 
-class TrafficLight
+class TrafficLight : public TrafficObject
 {
 public:
     // constructor / desctructor
@@ -58,7 +65,9 @@ private:
     // FP.4b : create a private member of type MessageQueue for messages of type TrafficLightPhase 
     // and use it within the infinite loop to push each new TrafficLightPhase into it by calling 
     // send in conjunction with move semantics.
-    
+    MessageQueue<TrafficLightPhase> _messageQueue;
+
+
     //Task-1
     void cycleThroughPhases();
     TrafficLightPhase _currentPhase;
